@@ -43,14 +43,18 @@ lock2 = threading.Lock()
 
 def addRand(shirt, pants, times = 1):
 	lock1.acquire()
-	for i in range(times):
-		shirt.setPrice(shirt.getPrice() + rand.randrange(1, 500)/10)
-	lock1.release()
+	try:
+		for i in range(times):
+			shirt.setPrice(shirt.getPrice() + rand.randrange(1, 500)/10)
+	finally:
+		lock1.release()
 
 	lock2.acquire()
-	for i in range(times):
-		pants.setPrice(pants.getPrice() + rand.randrange(1, 500)/10)
-	lock2.release()
+	try:
+		for i in range(times):
+			pants.setPrice(pants.getPrice() + rand.randrange(1, 500)/10)
+	finally:
+		lock2.release()
 	pass
 
 def main():
