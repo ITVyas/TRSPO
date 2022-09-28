@@ -1,7 +1,7 @@
 import threading 
 import random as rand
 from datetime import datetime
-
+from multiprocessing import Pool
 
 
 class Shirt:
@@ -41,7 +41,7 @@ class Pants:
 lock1 = threading.Lock()
 lock2 = threading.Lock()
 
-def addRand(shirt, pants, times = 1):
+def addRandFirstPart(shirt, pants, times = 1):
 	lock1.acquire()
 	try:
 		for i in range(times):
@@ -57,6 +57,22 @@ def addRand(shirt, pants, times = 1):
 		lock2.release()
 	pass
 
+def addRandSecondPart(shirt, pants, times = 1):
+	lock2.acquire()
+	try:
+		for i in range(times):
+			pants.setPrice(pants.getPrice() + rand.randrange(1, 500)/10)
+	finally:
+		lock2.release()
+
+	lock1.acquire()
+	try:
+		for i in range(times):
+			shirt.setPrice(shirt.getPrice() + rand.randrange(1, 500)/10)
+	finally:
+		lock1.release()
+	pass
+
 def main():
 	start = datetime.now()
 	shirt, pants = Shirt(15.5), Pants(16.2)
@@ -66,11 +82,11 @@ def main():
 
 	threads = []
 	for i in range(round(N/2)):
-		threads.append(threading.Thread(target = addRand, args = (shirt, pants, K1)))
+		threads.append(threading.Thread(target = addRandFirstPart, args = (shirt, pants, K1)))
 		threads[i].start()
 
 	for i in range(round(N/2)):
-		threads.append(threading.Thread(target = addRand, args = (shirt, pants, K2)))
+		threads.append(threading.Thread(target = addRandSecondPart, args = (shirt, pants, K2)))
 		threads[round(N/2)+i].start()
 
 
@@ -81,7 +97,5 @@ def main():
 	pass
 
 main()
-
-
 
 
