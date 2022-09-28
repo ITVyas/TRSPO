@@ -63,12 +63,12 @@ def main():
 	threads = []
 	for i in range(round(N/2)):
 		threads.append(threading.Thread(target = addRand, args = (shirt, pants, K1)))
+		threads[i].start()
+
 	for i in range(round(N/2)):
 		threads.append(threading.Thread(target = addRand, args = (shirt, pants, K2)))
+		threads[round(N/2)+i].start()
 
-	
-	for i in range(N):
-		threads[i].start()
 
 	for i in range(N):
 		threads[i].join()
