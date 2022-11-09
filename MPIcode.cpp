@@ -31,7 +31,7 @@ void printOutResult(double* calculatedPi, double* timeCalculation, int N, long p
 {
     for (int i = 0; i < N; i++)
     {
-        std::cout << "Points: " << pointsAmount / N * (i+1) << "\t| Pi = " << calculatedPi[N - 1 - i] << "\t| Time: " << timeCalculation[N - 1 - i] << "s" << std::endl;
+        std::cout << "Points: " << pointsAmount * (i+1) / N  << "\t| Pi = " << calculatedPi[N - 1 - i] << "\t| Time: " << timeCalculation[N - 1 - i] << "s" << std::endl;
     }
 }
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     double* calculatedPi = new double[ProcNum];
     double* timeCalculation = new double[ProcNum];
 
-    int NThisProc = N / ProcNum * (ProcNum - ProcRank);
+    int NThisProc = N * (ProcNum - ProcRank) / ProcNum ;
     pointsX = new double[NThisProc];
     pointsY = new double[NThisProc];
 
